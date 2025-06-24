@@ -789,11 +789,22 @@
     },
     {
       "scope": [
-        "entity.name.function",
         "meta.require",
         "support.function",
         "variable.function"
       ],
+      "settings": {
+        "foreground": "#EBC88D"
+      }
+    },
+    {
+      "scope": "entity.name.function",
+      "settings": {
+        "foreground": "#EBC88D"
+      }
+    },
+    {
+      "scope": "entity.name.function.member",
       "settings": {
         "foreground": "#EFB080"
       }
