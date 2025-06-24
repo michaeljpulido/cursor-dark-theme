@@ -2,3 +2,4 @@
 .vscode-test/**
 vsc-extension-quickstart.md
 *.vsix
+.DS_Store
