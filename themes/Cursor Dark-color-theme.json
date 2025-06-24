@@ -748,7 +748,7 @@
     {
       "scope": "variable",
       "settings": {
-        "foreground": "#D6D6DD"
+        "foreground": "#87C3FF"
       }
     },
     {
@@ -807,7 +807,7 @@
     {
       "scope": "support.class, entity.name.type.class",
       "settings": {
-        "foreground": "#87C3FF"
+        "foreground": "#BF616A"
       }
     },
     {
@@ -835,7 +835,7 @@
     {
       "scope": "entity.name.type",
       "settings": {
-        "foreground": "#EFB080"
+        "foreground": "#BF616A"
       }
     },
     {
@@ -901,12 +901,6 @@
       }
     },
     {
-      "scope": "meta.tag",
-      "settings": {
-        "foreground": "#FAD075"
-      }
-    },
-    {
       "scope": "string",
       "settings": {
         "foreground": "#E394DC"
@@ -918,6 +912,12 @@
         "foreground": "#EFB080"
       }
     },
+	{
+		"scope": "constant.language",
+		"settings": {
+			"foreground": "#FAD075"
+		}
+	},
     {
       "scope": "constant.other.symbol",
       "settings": {
@@ -940,6 +940,12 @@
       "scope": "punctuation.definition.constant",
       "settings": {
         "foreground": "#F8C762"
+      }
+    },
+	{
+      "scope": "entity.name.tag",
+      "settings": {
+        "foreground": "#FAD075"
       }
     },
     {
@@ -1465,7 +1471,7 @@
     {
       "scope": ["variable.parameter.function.js"],
       "settings": {
-        "foreground": "#D6D6DD"
+        "foreground": "#AAA0FA"
       }
     },
     {
@@ -1778,9 +1784,16 @@
         "foreground": "#D6D6DD"
       }
     },
+	{
+		"scope": "variable.parameter,variable.language.super",
+		"settings": {
+			"foreground": "#87C3FF"
+		},
+	},
     {
-      "scope": "entity.other.attribute-name.js,entity.other.attribute-name.ts,entity.other.attribute-name.jsx,entity.other.attribute-name.tsx,variable.parameter,variable.language.super",
+      "scope": "entity.other.attribute-name.js,entity.other.attribute-name.ts,entity.other.attribute-name.jsx,entity.other.attribute-name.tsx",
       "settings": {
+		"foreground": "#B48EAD",
         "fontStyle": "italic"
       }
     },
