@@ -100,7 +100,7 @@
     "gitDecoration.modifiedResourceForeground": "#EBCB8B",
     "gitDecoration.untrackedResourceForeground": "#88C0D0",
     "gitlens.trailingLineForegroundColor": "#CCCCCC99",
-    "input.background": "#2A2A2A55",
+    "input.background": "#1B1B1B",
     "input.border": "#2A2A2A",
     "input.foreground": "#FFFFFF",
     "input.placeholderForeground": "#FFFFFF99",
