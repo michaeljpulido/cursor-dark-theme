@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursor Dark Theme Colors</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .color-swatch {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
+        }
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #1a1a1a;
+            color: #D8DEE9;
+        }
+        .tab-button.active {
+            border-color: #81A1C1;
+        }
+        .color-group-heading {
+            width: 100%;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #A3BE8C;
+        }
+        /* Glow animation without fading */
+        @keyframes glowFade {
+            0% { box-shadow: 0 0 0px 0px #81A1C1; }
+            50% { box-shadow: 0 0 15px 5px #81A1C1; } /* Max glow, no opacity change */
+            100% { box-shadow: 0 0 0px 0px #81A1C1; } /* Return to no glow */
+        }
+        .color-item.copied {
+            animation: glowFade 1.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="p-6 md:p-10">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8 text-center text-white">Cursor Dark Theme Color Palette</h1>
+
+        <div class="flex border-b border-zinc-700 mb-6">
+            <button class="tab-button px-4 py-2 text-sm font-medium text-white border-b-2 border-transparent hover:border-blue-500 focus:outline-none" onclick="openTab(event, 'allCombinedTab')" id="defaultOpen">All</button>
+            <button class="tab-button px-4 py-2 text-sm font-medium text-white border-b-2 border-transparent hover:border-blue-500 focus:outline-none" onclick="openTab(event, 'semanticTab')">Semantic Token Colors</button>
+            <button class="tab-button px-4 py-2 text-sm font-medium text-white border-b-2 border-transparent hover:border-blue-500 focus:outline-none" onclick="openTab(event, 'tokenTab')">Token Colors</button>
+            <button class="tab-button px-4 py-2 text-sm font-medium text-white border-b-2 border-transparent hover:border-blue-500 focus:outline-none" onclick="openTab(event, 'colorsTab')">Colors</button>
+        </div>
+
+        <div id="allCombinedTab" class="tab-content bg-zinc-900 p-6 rounded-lg shadow-xl hidden">
+            <div id="allCombinedColorsList" class="flex flex-wrap gap-4">
+            </div>
+        </div>
+
+        <div id="semanticTab" class="tab-content bg-zinc-900 p-6 rounded-lg shadow-xl hidden">
+            <div id="semanticTokenColorsJsonList" class="flex flex-wrap gap-4">
+            </div>
+        </div>
+
+        <div id="tokenTab" class="tab-content bg-zinc-900 p-6 rounded-lg shadow-xl hidden">
+            <div id="tokenColorsJsonList" class="flex flex-wrap gap-4">
+            </div>
+        </div>
+
+        <div id="colorsTab" class="tab-content bg-zinc-900 p-6 rounded-lg shadow-xl hidden">
+            <div id="colorsJsonList" class="flex flex-wrap gap-4">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function hexToRgb(hex) {
+            let r = 0, g = 0, b = 0, a = 1;
+            hex = hex.toUpperCase();
+
+            if (hex.length === 4) {
+                r = parseInt(hex[1] + hex[1], 16);
+                g = parseInt(hex[2] + hex[2], 16);
+                b = parseInt(hex[3] + hex[3], 16);
+            } else if (hex.length === 7) {
+                r = parseInt(hex.substring(1, 3), 16);
+                g = parseInt(hex.substring(3, 5), 16);
+                b = parseInt(hex.substring(5, 7), 16);
+            } else if (hex.length === 9) {
+                r = parseInt(hex.substring(1, 3), 16);
+                g = parseInt(hex.substring(3, 5), 16);
+                b = parseInt(hex.substring(5, 7), 16);
+                a = parseInt(hex.substring(7, 9), 16) / 255;
+            } else {
+                console.warn(`Invalid hex color format: ${hex}. Defaulting to black.`);
+                return { r: 0, g: 0, b: 0, a: 1 };
+            }
+            return { r, g, b, a };
+        }
+
+        function rgbToHsl(r, g, b) {
+            r /= 255;
+            g /= 255;
+            b /= 255;
+
+            let cmin = Math.min(r, g, b),
+                cmax = Math.max(r, g, b),
+                delta = cmax - cmin,
+                h = 0,
+                s = 0,
+                l = 0;
+
+            if (delta === 0) {
+                h = 0;
+            } else if (cmax === r) {
+                h = ((g - b) / delta) % 6;
+            } else {
+                h = (cmax === g) ? (b - r) / delta + 2 : (r - g) / delta + 4;
+            }
+            h = Math.round(h * 60);
+            if (h < 0) h += 360;
+
+            l = (cmax + cmin) / 2;
+            s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+
+            s = +(s * 100).toFixed(1);
+            l = +(l * 100).toFixed(1);
+
+            return { h, s, l };
+        }
+
+        function openTab(evt, tabName) {
+            let i, tabcontent, tabbuttons;
+
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            tabbuttons = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tabbuttons.length; i++) {
+                tabbuttons[i].classList.remove("active");
+                tabbuttons[i].classList.remove("border-blue-500");
+                tabbuttons[i].classList.add("border-transparent");
+            }
+
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.classList.add("active");
+            evt.currentTarget.classList.remove("border-transparent");
+            evt.currentTarget.classList.add("border-blue-500");
+        }
+
+        function appendColorItems(containerElement, colorsArray) {
+            const colorsWithHsl = colorsArray.map(hex => {
+                const rgb = hexToRgb(hex);
+                const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+                const perceivedLightness = (rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114) / 255;
+                return {
+                    hex: hex,
+                    rgb: rgb,
+                    hsl: hsl,
+                    perceivedLightness: perceivedLightness
+                };
+            });
+
+            const achromaticColors = colorsWithHsl.filter(c => c.hsl.s === 0);
+            const chromaticColors = colorsWithHsl.filter(c => c.hsl.s > 0);
+
+            achromaticColors.sort((a, b) => a.perceivedLightness - b.perceivedLightness);
+
+            const hueBands = new Map();
+            const hueBandNames = [
+                { name: "Red", min: 345, max: 15 },
+                { name: "Orange", min: 15, max: 45 },
+                { name: "Yellow", min: 45, max: 75 },
+                { name: "Chartreuse", min: 75, max: 105 },
+                { name: "Green", min: 105, max: 165 },
+                { name: "Cyan", min: 165, max: 195 },
+                { name: "Blue", min: 195, max: 255 },
+                { name: "Purple", min: 255, max: 285 },
+                { name: "Magenta", min: 285, max: 345 }
+            ];
+
+            chromaticColors.forEach(color => {
+                let assignedBand = null;
+                for (const band of hueBandNames) {
+                    if (band.min <= band.max) {
+                        if (color.hsl.h >= band.min && color.hsl.h < band.max) {
+                            assignedBand = band.name;
+                            break;
+                        }
+                    } else {
+                        if (color.hsl.h >= band.min || color.hsl.h < band.max) {
+                            assignedBand = band.name;
+                            break;
+                        }
+                    }
+                }
+                if (!assignedBand) {
+                    assignedBand = "Other Hues";
+                }
+                if (!hueBands.has(assignedBand)) {
+                    hueBands.set(assignedBand, []);
+                }
+                hueBands.get(assignedBand).push(color);
+            });
+
+            containerElement.innerHTML = '';
+
+            if (achromaticColors.length > 0) {
+                const achromaticHeading = document.createElement('h3');
+                achromaticHeading.className = 'color-group-heading';
+                achromaticHeading.textContent = 'Grayscale & Achromatic';
+                containerElement.appendChild(achromaticHeading);
+
+                const achromaticGrid = document.createElement('div');
+                achromaticGrid.className = 'flex flex-wrap gap-4';
+                achromaticColors.forEach(colorObj => {
+                    achromaticGrid.appendChild(createColorItemElement(colorObj.hex));
+                });
+                containerElement.appendChild(achromaticGrid);
+            }
+
+            const sortedHueBandNames = hueBandNames.map(band => band.name).filter(name => hueBands.has(name));
+            if (hueBands.has("Other Hues")) {
+                sortedHueBandNames.push("Other Hues");
+            }
+
+            sortedHueBandNames.forEach(bandName => {
+                const colorsInBand = hueBands.get(bandName);
+                if (colorsInBand && colorsInBand.length > 0) {
+                    colorsInBand.sort((a, b) => {
+                        if (a.hsl.s !== b.hsl.s) {
+                            return b.hsl.s - a.hsl.s;
+                        }
+                        return a.hsl.l - b.hsl.l;
+                    });
+
+                    const bandHeading = document.createElement('h3');
+                    bandHeading.className = 'color-group-heading';
+                    bandHeading.textContent = bandName;
+                    containerElement.appendChild(bandHeading);
+
+                    const bandGrid = document.createElement('div');
+                    bandGrid.className = 'flex flex-wrap gap-4';
+                    colorsInBand.forEach(colorObj => {
+                        bandGrid.appendChild(createColorItemElement(colorObj.hex));
+                    });
+                    containerElement.appendChild(bandGrid);
+                }
+            });
+        }
+
+        function createColorItemElement(colorCode) {
+            const colorItem = document.createElement('div');
+            colorItem.className = 'color-item flex items-center p-2 rounded-md bg-zinc-800 cursor-pointer w-48 flex-none';
+
+            const swatch = document.createElement('div');
+            swatch.className = 'color-swatch';
+            swatch.style.backgroundColor = colorCode;
+
+            const codeText = document.createElement('p');
+            codeText.className = 'ml-3 font-mono text-white text-sm flex-grow truncate';
+            codeText.textContent = colorCode;
+
+            colorItem.onclick = function() {
+                const textToCopy = codeText.textContent;
+                const tempInput = document.createElement('textarea');
+                tempInput.value = textToCopy;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+
+                colorItem.classList.add('copied');
+                colorItem.addEventListener('animationend', () => {
+                    colorItem.classList.remove('copied');
+                }, { once: true });
+            };
+
+            colorItem.appendChild(swatch);
+            colorItem.appendChild(codeText);
+            return colorItem;
+        }
+
+        const colorsJson = [
+            "#000000", "#141414", "#191C22", "#1A1A1A", "#181818", "#292929", "#2A2A2A",
+            "#30373A", "#363636", "#404040", "#434C5E", "#494949", "#505050", "#565656",
+            "#767676", "#ECECEC", "#FFFFFF", "#D8DEE9", "#F8C762", "#E5B95C", "#EA7620",
+            "#EBCB8B", "#EBC88D", "#EFB080", "#F5A623", "#FAD075", "#BF616A", "#F44747",
+            "#F14C4C", "#DC143C", "#81A1C1", "#87A6C4", "#88C0D0", "#94C1FA", "#87C3FF",
+            "#4A90E2", "#1E90FF", "#22B2DA", "#A3BE8C", "#15AC91", "#00FF7F", "#7FFF00",
+            "#ADFF2F", "#3CB371", "#CCCCCC", "#D1D1D1", "#D6D6DD", "#EFEFEF", "#FFD700",
+            "#636262DD", "#CCCCCC99", "#CCCCCCDD", "#CCCCCC82", "#CACC82", "#FFFFFF99",
+            "#FFFFFF70", "#FFFFFF66", "#FFFFFF55", "#FFFFFF33", "#FFFFFF2D", "#FFFFFF22",
+            "#FFFFFF21", "#FFFFFF1D", "#FFFFFF10", "#FFFFFF0D", "#FFFFFF00", "#BF616A22",
+            "#A3BE8C22", "#BF616AC0", "#BF616A99", "#A3BE8C99", "#EBCB8B99", "#404040CC",
+            "#40404099", "#40404077", "#40404055", "#40404052", "#505050B3", "#404040B3",
+            "#2A2A2A99", "#00000066", "#60606055", "#88C0D066", "#88C0D04D", "#88C0D044",
+            "#88C0D000", "#A3BE8C66", "#A3BE8C4D", "#15AC9170", "#BF616A00", "#EBCB8B00",
+            "#2A2A2A00", "#00000000", "#14141400"
+        ];
+
+        const semanticTokenColorsJson = [
+            "#D1D1D1", "#D6D6DD", "#EFEFEF", "#82D2CE", "#83D6C5", "#87C3FF", "#AA9BF5",
+            "#AF9CFF", "#A8CC7C", "#E3C893", "#EBC88D", "#EFB080", "#CC7C8A"
+        ];
+
+        const tokenColorsJson = [
+            "#D1D1D1", "#D6D6DD", "#898989", "#FFFFFF5C", "#82D2CE", "#83D6C5",
+            "#94C1FA", "#87C3FF", "#AAA0FA", "#AA9BF5", "#AF9CFF", "#A8CC7C",
+            "#E394DC", "#C1808A", "#F44747", "#EFB080", "#EBC88D", "#F8C762",
+            "#FAD075"
+        ];
+
+        const allCombinedColors = Array.from(new Set([
+            ...colorsJson,
+            ...semanticTokenColorsJson,
+            ...tokenColorsJson
+        ]));
+
+        const colorsJsonList = document.getElementById('colorsJsonList');
+        const semanticTokenColorsJsonList = document.getElementById('semanticTokenColorsJsonList');
+        const tokenColorsJsonList = document.getElementById('tokenColorsJsonList');
+        const allCombinedColorsList = document.getElementById('allCombinedColorsList');
+
+        appendColorItems(colorsJsonList, colorsJson);
+        appendColorItems(semanticTokenColorsJsonList, semanticTokenColorsJson);
+        appendColorItems(tokenColorsJsonList, tokenColorsJson);
+        appendColorItems(allCombinedColorsList, allCombinedColors);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('defaultOpen').click();
+        });
+    </script>
+</body>
+</html>
