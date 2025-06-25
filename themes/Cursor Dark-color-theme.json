@@ -704,7 +704,7 @@
     {
       "name": "Namespaces",
       "scope": "entity.name.namespace",
-      "settings": { "foreground": "#d1d1d1" }
+      "settings": { "foreground": "#22B2DA" }
     },
     {
       "name": "Variables",
@@ -1611,6 +1611,31 @@
       "settings": {
         "foreground": "#87C3FF"
       }
-    }
+    },
+    {
+      "name": "Source (Python)",
+      "scope": "source.python",
+      "settings": {
+        "foreground": "#94C1FA"
+      }
+    },
+    {
+      "scope": "variable.parameter.function.language.python",
+      "settings": {
+        "foreground": "#CC7C8A"
+      }
+    },
+    {
+      "scope": "meta.function.parameters.python",
+      "settings": {
+        "foreground": "#82D2CE"
+      }
+    },
+    {
+      "scope": "meta.member.access.python meta.function-call.generic.python",
+      "settings": {
+        "foreground": "#EBC88D"
+      }
+    },
   ]
 }
