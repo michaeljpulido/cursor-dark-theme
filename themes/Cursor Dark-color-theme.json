@@ -1585,8 +1585,8 @@
       }
     },
     {
-      "name": "Boolean",
-      "scope": ["constant.language.boolean", "constant.language.null"],
+      "name": "Boolean, Null, Undefined",
+      "scope": ["constant.language.boolean", "constant.language.null", "constant.language.undefined"],
       "settings": {
         "foreground": "#88C0D0"
       }
@@ -1637,5 +1637,11 @@
         "foreground": "#EBC88D"
       }
     },
+    {
+      "scope": "entity.name.tag",
+      "settings": {
+        "foreground": "#FAD075"
+      }
+    }
   ]
 }
