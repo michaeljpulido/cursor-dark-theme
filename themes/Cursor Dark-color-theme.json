@@ -1571,7 +1571,7 @@
       "settings": { "fontStyle": "italic" }
     },
     {
-      "name": "Python Function Call Parameters",
+      "name": "Function Call Parameters (Python)",
       "scope": "variable.parameter.function-call.python",
       "settings": {
         "foreground": "#CC7C8A"
@@ -1589,6 +1589,27 @@
       "scope": ["constant.language.boolean", "constant.language.null"],
       "settings": {
         "foreground": "#88C0D0"
+      }
+    },
+    {
+      "name": "Parameters",
+      "scope": ["variable.parameter", "variable.other.object"],
+      "settings": {
+        "foreground": "#CC7C8A"
+      }
+    },
+    {
+      "name": "Meta Object Literal Key",
+      "scope": ["meta.object-literal.key", "meta.definition.property variable.object.property"],
+      "settings": {
+        "foreground": "#AA9BF5"
+      }
+    },
+    {
+      "name": "Type Parameters",
+      "scope": "meta.type.parameters entity.name.type",
+      "settings": {
+        "foreground": "#87C3FF"
       }
     }
   ]
