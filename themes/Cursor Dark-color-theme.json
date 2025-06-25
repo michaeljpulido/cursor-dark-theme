@@ -240,7 +240,7 @@
   "semanticTokenColors": {
     "enumMember": { "foreground": "#d6d6dd" },
     "variable.constant": { "foreground": "#83d6c5" },
-    "variable.defaultLibrary": { "foreground": "#d6d6dd" },
+    "variable.defaultLibrary": { "foreground": "#4A90E2" },
     "variable.defaultLibrary.globalScope": { "foreground": "#d1d1d1" },
     "class.typeHint": "#82d2ce",
     "variable.declaration.readonly:cpp": "#d1d1d1",
@@ -837,7 +837,7 @@
     {
       "name": "Meta tag",
       "scope": "meta.tag",
-      "settings": { "foreground": "#fad075" }
+      "settings": { "foreground": "#D1D1D1" }
     },
     {
       "name": "Strings",
@@ -1575,6 +1575,20 @@
       "scope": "variable.parameter.function-call.python",
       "settings": {
         "foreground": "#CC7C8A"
+      }
+    },
+    {
+      "name": "Object Property",
+      "scope": "variable.object.property",
+      "settings": {
+        "foreground": "#94C1FA",
+      }
+    },
+    {
+      "name": "Boolean",
+      "scope": ["constant.language.boolean", "constant.language.null"],
+      "settings": {
+        "foreground": "#88C0D0"
       }
     }
   ]
